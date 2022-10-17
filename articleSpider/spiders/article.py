@@ -9,15 +9,19 @@ import scrapy
 from scrapy_selenium import SeleniumRequest
 from bs4 import BeautifulSoup
 from articleSpider.items import Article
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 class ArticleSpider(scrapy.Spider):
     name='article'
     url='https://cyberleninka.ru/search'
     search ='?q=web'
+    pages = '&page='
+    pages_count = ['1','2','3']
 
     def start_requests(self):
-        yield SeleniumRequest(url=self.url+self.search, callback=self.parse)
+        return [SeleniumRequest(url=self.url+self.search+self.pages+page, callback=self.parse, wait_time=10) for page in self.pages_count]
 
   
     def parse(self, response):
@@ -33,7 +37,7 @@ class ArticleSpider(scrapy.Spider):
                 if liname != None and liau != None:
                     articleItem['title'] = ' '.join(liname.text.replace('\n', '').split())
                     articleItem['href'] = self.url+liname.get('href')
-                    articleItem['author'] = liau.text.replace('\n\"', '').strip()
+                    articleItem['author'] = liau.text.replace('\n', '').strip().replace('"','')
                     yield articleItem
             finally:
                 continue
