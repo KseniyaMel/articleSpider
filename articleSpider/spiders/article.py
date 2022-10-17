@@ -24,7 +24,6 @@ class ArticleSpider(scrapy.Spider):
         articleItem = Article()
         soup = BeautifulSoup(response.text, "html.parser")
         articles = soup.find('ul',id='search-results').findChildren()
-        print('j')
         for article in articles:
             st = article.prettify()
             lisoup = BeautifulSoup(st, "html.parser")
