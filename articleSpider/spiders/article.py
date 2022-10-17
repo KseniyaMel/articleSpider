@@ -15,8 +15,8 @@ from selenium.webdriver.common.by import By
 
 class ArticleSpider(scrapy.Spider):
     name='article'
-    url='https://cyberleninka.ru/search'
-    search ='?q=web'
+    url='https://cyberleninka.ru'
+    search ='/search?q=web'
     pages = '&page='
     pages_count = ['1','2','3']
 
